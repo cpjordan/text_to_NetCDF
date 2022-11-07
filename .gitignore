@@ -1,0 +1,7 @@
+*
+!.gitignore
+!test
+!test/*.py
+!test/*.txt
+!txt_to_npy.py
+!npy_to_nc_UTM.py
