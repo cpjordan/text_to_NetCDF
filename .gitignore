@@ -3,5 +3,7 @@
 !test
 !test/*.py
 !test/*.txt
+!test/RBF_interpolation
+!test/RBF_interpolation/*.py
 !txt_to_npy.py
 !npy_to_nc_UTM.py

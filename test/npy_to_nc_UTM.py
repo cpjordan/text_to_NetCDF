@@ -1,4 +1,4 @@
-# Filename: 'npy_to_nc_UTM.py'
+# Filename: 'npy_to_nc_tester.py'
 # Date: 18/10/2022
 # Author: Connor Jordan
 # Institution: University of Edinburgh (IIE)
@@ -19,7 +19,7 @@ print('Modules imported... (', datetime.now() - starttime, ')')
 dt_string = starttime.strftime("%d/%m/%Y %H:%M:%S")
 print("Simulation start: ", dt_string, '\n')
 
-data = np.load('bathymetry.npy')
+data = np.loadtxt('tester.txt', delimiter=",", skiprows=1)
 
 print('Bathymetry data loaded... (', datetime.now() - starttime, ')')
 
@@ -35,7 +35,7 @@ print('Data sliced... (', datetime.now() - starttime, ')')
 
 min_X_UTM, max_X_UTM, min_Y_UTM, max_Y_UTM = min(X_UTM), max(X_UTM), min(Y_UTM), max(Y_UTM)
 
-resolution = 5  # desired resolution in m
+resolution = 0.5  # desired resolution in m
 
 x_number = np.abs(max_X_UTM-min_X_UTM) / resolution
 y_number = np.abs(max_Y_UTM-min_Y_UTM) / resolution
@@ -52,7 +52,7 @@ xx, yy = np.meshgrid(xi, yi, indexing='ij')  # Create grid of values, xx is grid
 print('Grid meshed... (', datetime.now() - starttime, ')')
 
 # Interpolate velocity and direction fields from coordinates (x,y) to grid (xx, yy)
-elev_grid = griddata((X_UTM, Y_UTM), elev_list, (xx, yy), method='linear')
+elev_grid = griddata((X_UTM, Y_UTM), elev_list, (xx, yy), method='nearest')
 
 elev_grid_ = np.transpose(elev_grid)
 
@@ -60,7 +60,7 @@ print('Data interpolated to grid... (', datetime.now() - starttime, ')')
 
 print('\nConverting to NetCDF... (', datetime.now() - starttime, ')')
 
-ds = nc.Dataset('bathymetry_linear.nc', 'w', 'NETCDF4')  # using netCDF4 for output format
+ds = nc.Dataset('test.nc', 'w', 'NETCDF4')  # using netCDF4 for output format
 
 x = ds.createDimension('x', xi.size)
 y = ds.createDimension('y', yi.size)
