@@ -1,4 +1,4 @@
-# Filename: 'txt_to_nc.py'
+# Filename: 'txt_to_npy.py'
 # Date: 17/10/2022
 # Author: Connor Jordan
 # Institution: University of Edinburgh (IIE)
@@ -9,12 +9,9 @@ from datetime import datetime
 
 starttime = datetime.now()  # to calculate script runtime
 
-
 # This loads ASCII (character encoding standard for electronic communication, ASCII codes represent text in
-# computers) data stored in a comma-separated file (.csv). np.recfromcsv invokes np.genfromtxt with parameters
-# names=True as default, meaning that it reads the first line of the data from the csv files as headers - which is
-# why only the values beneath are returned. The shape of the output is (n, 1) where n = no. of lines because each
-# line of data is represented as a tuple, so there are n lines of tuples.
+# computers) data stored in a delimited text file (.txt). The shape of the output is (n, 1) where n = no. of lines
+# because each line of data is represented as a tuple, so there are n lines of tuples. Skip first row i.e. headers.
 data = np.loadtxt('3475 Stroma AllData WGS84.txt', delimiter=",", skiprows=1)  # output: n times 1 array of tuples
 
 simulationtime = datetime.now() - starttime  # calculate simulation time

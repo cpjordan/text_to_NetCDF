@@ -10,7 +10,6 @@ import numpy as np
 from scipy.interpolate import griddata
 import netCDF4 as nc
 from datetime import datetime
-import pyproj
 
 starttime = datetime.now()  # calculating run times
 
@@ -35,7 +34,7 @@ print('Data sliced... (', datetime.now() - starttime, ')')
 
 min_X_UTM, max_X_UTM, min_Y_UTM, max_Y_UTM = min(X_UTM), max(X_UTM), min(Y_UTM), max(Y_UTM)
 
-resolution = 5  # desired resolution in m
+resolution = 0.5  # desired resolution in m
 
 x_number = np.abs(max_X_UTM-min_X_UTM) / resolution
 y_number = np.abs(max_Y_UTM-min_Y_UTM) / resolution
@@ -52,7 +51,7 @@ xx, yy = np.meshgrid(xi, yi, indexing='ij')  # Create grid of values, xx is grid
 print('Grid meshed... (', datetime.now() - starttime, ')')
 
 # Interpolate velocity and direction fields from coordinates (x,y) to grid (xx, yy)
-elev_grid = griddata((X_UTM, Y_UTM), elev_list, (xx, yy), method='linear')
+elev_grid = griddata((X_UTM, Y_UTM), elev_list, (xx, yy), method='nearest')
 
 elev_grid_ = np.transpose(elev_grid)
 
@@ -60,7 +59,7 @@ print('Data interpolated to grid... (', datetime.now() - starttime, ')')
 
 print('\nConverting to NetCDF... (', datetime.now() - starttime, ')')
 
-ds = nc.Dataset('bathymetry_linear.nc', 'w', 'NETCDF4')  # using netCDF4 for output format
+ds = nc.Dataset('bathymetry_UTM.nc', 'w', 'NETCDF4')  # using netCDF4 for output format
 
 x = ds.createDimension('x', xi.size)
 y = ds.createDimension('y', yi.size)

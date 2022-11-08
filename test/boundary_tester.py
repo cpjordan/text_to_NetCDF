@@ -120,7 +120,7 @@ if plotting is True:
 
     plt.show()
 
-# Step 3: Write shapefile to act ask mask to clip interpolated data
+# Step 3: Write shapefile to act as mask to clip interpolated data
 
 # Define a polygon feature geometry with one attribute
 schema = {
@@ -133,7 +133,7 @@ with fiona.open('test_boundary.shp', 'w', 'ESRI Shapefile', schema, crs='epsg:32
     output.write({'geometry': geometry.mapping(Boundary), 'properties': {'id': 0}})
 
 
-# Optional step: check convex hull, the above is for a concave hull
+# Optional step: check convex hull, all other methods are for a concave hull
 
 # hull = ConvexHull(Coords)
 # for simplex in hull.simplices:
@@ -148,7 +148,7 @@ print('alphashapes, full data:', t2-t1, 's')
 print('alpha_shapes, full data:', t4-t3, 's')
 
 
-# Step 4: Remove redundant data prior to boundary determination
+# Step 4: Remove redundant data prior to boundary determination to see potential time reduction
 
 t5 = datetime.now()
 
@@ -219,21 +219,15 @@ def alpha_shape(points, alpha):
     return cascaded_union(triangles), edge_points
 
 
-Boundary, edgepoints = alpha_shape(Coords, alpha=1)
+Boundary, edgepoints = alpha_shape(Coords_, alpha=1)
 print('v2_Boundary generated... (', datetime.now() - starttime, ')')
 
-Boundary_x, Boundary_y = Boundary.exterior.coords.xy
-print('Boundary coordinates split... (', datetime.now() - starttime, ')')
+# May create Multi-Polygon so cannot plot!
 
-Boundaries = np.asarray([Boundary_x, Boundary_y]).T
+with fiona.open('test_boundary_partial.shp', 'w', 'ESRI Shapefile', schema, crs='epsg:32630') as output:
+    output.write({'geometry': geometry.mapping(Boundary), 'properties': {'id': 0}})
 
 t6 = datetime.now()
-
-if plotting is True:
-    # plt.plot(x, y, 'o', color='black', markersize=6)
-    plt.plot(Boundaries[:, 0], Boundaries[:, 1], 'x', color='red', markersize=4)
-
-    plt.show()
 
 print('alpha_shapes, partial data:', t6-t5, 's')
 
