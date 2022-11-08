@@ -1,9 +1,10 @@
 *
 !.gitignore
-!test
-!test/*.py
-!test/*.txt
-!test/RBF_interpolation
-!test/RBF_interpolation/*.py
+!test_files
+!test_files/*.py
+!test_files/*.txt
+!test_files/RBF_interpolation
+!test_files/RBF_interpolation/*.py
 !txt_to_npy.py
 !npy_to_nc_UTM.py
+!boundary_generation.py

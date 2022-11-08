@@ -31,7 +31,7 @@ dt_string = starttime.strftime("%d/%m/%Y %H:%M:%S")
 print("Simulation start: ", dt_string, '\n')
 
 if reduction is True:
-    data = np.load('../bathymetry.npy')
+    data = np.load('bathymetry.npy')
     print('Bathymetry data loaded... (', datetime.now() - starttime, ')')
     print('Original number of points = ', len(data[:, 0]))
 else:
