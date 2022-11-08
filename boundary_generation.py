@@ -3,6 +3,8 @@
 # Author: Connor Jordan
 # Institution: University of Edinburgh (IIE)
 # This script takes x, y, z data and tries to determine the boundary using alpha shapes.
+# Credit to Kevin Dwyer and Simon Cozens for the custom alpha_shapes function.
+# https://gist.github.com/dwyerk/10561690
 # https://stackoverflow.com/questions/72418933/find-boundary-points-of-xy-coordinates
 # https://stackoverflow.com/questions/50549128/boundary-enclosing-a-given-set-of-points
 # https://gist.github.com/AndreLester/589ea1eddd3a28d00f3d7e47bd9f28fb
@@ -142,6 +144,8 @@ print('Boundary generated... (', datetime.now() - starttime, ')')
 
 t2 = datetime.now()
 
+print('Boundary generation time:', t2-t1, 's')
+
 # Step 4: Write shapefile to act ask mask to clip interpolated data
 
 print('Writing polygon shapefile... (', datetime.now() - starttime, ')')
@@ -156,5 +160,3 @@ with fiona.open('boundary.shp', 'w', 'ESRI Shapefile', schema, crs='epsg:32630')
 simulationtime = datetime.now() - starttime  # calculate simulation time
 
 print('Shapefile written, total conversion process time = ', simulationtime)
-
-print('Boundary generation time for custom alpha shapes algorithm:', t2-t1, 's')
