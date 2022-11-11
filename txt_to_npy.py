@@ -9,6 +9,9 @@ from datetime import datetime
 
 starttime = datetime.now()  # to calculate script runtime
 
+dt_string = starttime.strftime("%d/%m/%Y %H:%M:%S")
+print("Simulation start: ", dt_string, '\n')
+
 # This loads ASCII (character encoding standard for electronic communication, ASCII codes represent text in
 # computers) data stored in a delimited text file (.txt). The shape of the output is (n, 1) where n = no. of lines
 # because each line of data is represented as a tuple, so there are n lines of tuples. Skip first row i.e. headers.

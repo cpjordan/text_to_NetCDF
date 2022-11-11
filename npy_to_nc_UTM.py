@@ -27,8 +27,8 @@ Y_UTM = data[:, 1]
 Elevation = data[:, 2]
 
 # Assign NaN (Not a Number) to land points (invalid points) -  prevents errors from occurring but does not
-# impact interpolation
-elev_list = np.where(Elevation <= 0, np.nan, Elevation)
+# impact interpolation. Also make any processing changes e.g. for offset in elevation data
+elev_list = np.where(Elevation <= 0, np.nan, Elevation - 49.32)
 
 print('Data sliced... (', datetime.now() - starttime, ')')
 
@@ -93,7 +93,7 @@ ys.grid_mapping_name = 'Northing Easting'
 ys.actual_range = (min(yi), max(yi))
 
 elev.units = 'm'
-elev.positive = "down"
+elev.positive = "up"
 elev.grid_mapping = 'WGS_1984_UTM_Zone_30N'
 elev[:, :] = elev_grid_
 

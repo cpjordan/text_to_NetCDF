@@ -20,7 +20,7 @@ from sys import exit
 import alphashape
 
 plotting = False  # best not to plot for large data sets as a shapefile is generated and viewable via QGIS more easily
-reduction = False  # add whether a reduction phase is required - use bounds_vis.py & QGIS to determine boundaries first
+reduction = True  # add whether a reduction phase is required - use bounds_vis.py & QGIS to determine boundaries first
 mode = 'alphashapes'  # choose 'alphashapes' or 'custom'
 
 # Step 1: Load in data
@@ -36,17 +36,18 @@ if reduction is True:
     data = np.load('bathymetry.npy')
     print('Bathymetry data loaded... (', datetime.now() - starttime, ')')
     print('Original number of points = ', len(data[:, 0]))
+    Coords = data[:, :-1]
 else:
     data = np.load('bathymetry_reduced.npy')
 
-Coords = data[:, :-1]  # remove final column i.e. elevation data
+    Coords = data[:, :-1]  # remove final column i.e. elevation data
+
+    if plotting is True:
+        x, y = Coords[:, 0], Coords[:, 1]
+    else:
+        x, y = 0, 0
 
 print('Elevation data dropped... (', datetime.now() - starttime, ')')
-
-if plotting is True:
-    x, y = Coords[:, 0], Coords[:, 1]
-else:
-    x, y = 0, 0
 
 
 # Step 2: Remove redundant data prior to boundary determination
@@ -81,7 +82,8 @@ if reduction is True:
             Coords_x.append(coordinate[0])
             Coords_y.append(coordinate[1])
     Coords_ = np.array([Coords_x, Coords_y]).T
-    np.save('bathymetry_reduced.npy', Coords_)
+    data = Coords_
+    np.save('bathymetry_reduced.npy', data)
     print('Redundant data removed... (', datetime.now() - starttime, ')')
     print('Reduced number of points = ', len(Coords_x))
     if plotting is True:
